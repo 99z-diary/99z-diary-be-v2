@@ -8,6 +8,8 @@ import { User } from './user/entities/user.entity';
 import { PostModule } from './post/post.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { AuthModule } from './auth/auth.module';
+import { SignupModule } from './signup/signup.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -25,10 +27,16 @@ import { AuthModule } from './auth/auth.module';
       synchronize: true,
       logging: true,
     }),
+    CacheModule.register({
+      ttl: 60 * 5 * 1000,
+      max: 100,
+      isGlobal: true,
+    }),
     UserModule,
     PostModule,
     ScheduleModule,
     AuthModule,
+    SignupModule,
   ],
   controllers: [AppController],
   providers: [AppService],
