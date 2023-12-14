@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Res } from '@nestjs/common';
+import { Controller, Post, Get, Body, Res, Param } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserLoginDto } from './dto/user.login.dto';
 import { Response } from 'express';
@@ -38,5 +38,13 @@ export class UserController {
       maxAge: 0,
     });
     return res.send(true);
+  }
+
+  @Get('/find/email')
+  async findEmail(
+    @Param('name') name: string,
+    @Param('phone') phone: string,
+  ): Promise<string | boolean> {
+    return await this.userService.findEmail(name, phone);
   }
 }

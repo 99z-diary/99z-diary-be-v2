@@ -29,4 +29,12 @@ export class UserRepository extends Repository<User> {
     const duplicate = await this.findOneBy({ nickname });
     return !duplicate;
   }
+
+  async findEmailByNameAndPhone(
+    name: string,
+    phone: string,
+  ): Promise<string | boolean> {
+    const targetEmail = await this.findOneBy({ name, phone });
+    return !targetEmail.email ? false : targetEmail.email;
+  }
 }

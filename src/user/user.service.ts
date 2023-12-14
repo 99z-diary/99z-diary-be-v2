@@ -51,4 +51,8 @@ export class UserService {
       }
     }
   }
+
+  async findEmail(name: string, phone: string): Promise<string | boolean> {
+    return await this.userRepository.findEmailByNameAndPhone(name, phone);
+  }
 }
