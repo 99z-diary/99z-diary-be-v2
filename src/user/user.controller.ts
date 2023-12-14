@@ -13,7 +13,7 @@ export class UserController {
     @Res() res: Response,
   ): Promise<any> {
     const info = await this.userService.findUser(userLoginDto);
-    res.setHeader('Authorization', '99zdiary' + info.accessToken);
+    res.setHeader('Authorization', 'Bearer ' + info.accessToken);
     return res.json(info.user);
   }
 }
