@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class Post {
@@ -14,10 +20,10 @@ export class Post {
   @Column({ array: true })
   images: string;
 
-  @Column()
+  @CreateDateColumn()
   created: Date;
 
-  @Column()
+  @UpdateDateColumn()
   updated: Date;
 
   @Column()
