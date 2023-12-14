@@ -6,9 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
 import { PostModule } from './post/post.module';
-import { Post } from './post/entities/post.entity';
 import { ScheduleModule } from './schedule/schedule.module';
-import { Schedule } from './schedule/entities/schedule.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,12 +21,14 @@ import { Schedule } from './schedule/entities/schedule.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User, Post, Schedule],
-      synchronize: false,
+      entities: [User],
+      synchronize: true,
+      logging: true,
     }),
     UserModule,
     PostModule,
     ScheduleModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
