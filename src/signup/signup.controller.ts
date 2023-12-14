@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Put, Query } from '@nestjs/common';
 import { SignupService } from './signup.service';
 import { SignupEmailDto } from './dto/signup.email.dto';
+import { SignupNicknameDto } from './dto/signup.nickname.dto';
 
 @Controller('signup')
 export class SignupController {
@@ -23,5 +24,14 @@ export class SignupController {
     @Query('code') code: string,
   ): Promise<boolean> {
     return await this.signupService.verifyCode(signupEmailDto.email, code);
+  }
+
+  @Post('/nickname')
+  async checkNickname(
+    @Body() signupNicknameDto: SignupNicknameDto,
+  ): Promise<boolean> {
+    return await this.signupService.checkNicknameDuplicate(
+      signupNicknameDto.nickname,
+    );
   }
 }

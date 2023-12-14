@@ -64,4 +64,12 @@ export class SignupService {
       return true;
     }
   }
+
+  async checkNicknameDuplicate(nickname: string): Promise<boolean> {
+    const checkResult =
+      await this.userRepository.checkNicknameDuplicate(nickname);
+    if (!checkResult) {
+      throw new HttpException('중복된 닉네임입니다!!', HttpStatus.BAD_REQUEST);
+    } else return checkResult;
+  }
 }
