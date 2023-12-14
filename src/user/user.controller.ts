@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { UserLoginDto } from './dto/user.login.dto';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { UserPasswordDto } from './dto/user.password.dto';
 
 @Controller('user')
 export class UserController {
@@ -46,5 +47,12 @@ export class UserController {
     @Param('phone') phone: string,
   ): Promise<string | boolean> {
     return await this.userService.findEmail(name, phone);
+  }
+
+  @Post('/find/password')
+  async findPassword(
+    @Body() userPasswordDto: UserPasswordDto,
+  ): Promise<boolean> {
+    return await this.userService.findPassword(userPasswordDto);
   }
 }
