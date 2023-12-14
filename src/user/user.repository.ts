@@ -19,4 +19,14 @@ export class UserRepository extends Repository<User> {
     const user = await this.findOneBy({ email });
     return user;
   }
+
+  async checkEmailDuplicate(email: string): Promise<boolean> {
+    const duplicate = await this.findOneBy({ email });
+    return !duplicate;
+  }
+
+  async checkNicknameDuplicate(nickname: string): Promise<boolean> {
+    const duplicate = await this.findOneBy({ nickname });
+    return !duplicate;
+  }
 }
