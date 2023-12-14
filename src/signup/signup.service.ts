@@ -7,6 +7,9 @@ import * as nodemailer from 'nodemailer';
 import { EmailOptions } from './interface/emailoption.interface';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { UserDto } from 'src/user/dto/user.dto';
+import * as bcrypt from 'bcrypt';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class SignupService {
@@ -71,5 +74,19 @@ export class SignupService {
     if (!checkResult) {
       throw new HttpException('중복된 닉네임입니다!!', HttpStatus.BAD_REQUEST);
     } else return checkResult;
+  }
+
+  async signup(userDto: UserDto): Promise<boolean> {
+    const newUser = new User();
+    newUser.email = userDto.email;
+    newUser.name = userDto.name;
+    newUser.nickname = userDto.nickname;
+    newUser.phone = userDto.phone;
+    newUser.password = await bcrypt.hash(
+      userDto.password,
+      Number(this.configService.get('BCRYPT_HASH_KEY')),
+    );
+    const result = await this.userRepository.save(newUser);
+    return result ? true : false;
   }
 }
