@@ -1,7 +1,6 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -9,8 +8,7 @@ export class AuthController {
 
   @Get('/authenticate')
   @UseGuards(AuthGuard())
-  isAuthenticated(@Req() req: Request): any {
-    const user: any = req.user;
-    return user;
+  isAuthenticated(): any {
+    return true;
   }
 }

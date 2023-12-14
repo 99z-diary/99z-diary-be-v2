@@ -2,10 +2,14 @@ import { Controller, Post, Body, Res } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserLoginDto } from './dto/user.login.dto';
 import { Response } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private configService: ConfigService,
+  ) {}
 
   @Post('/login')
   async login(
@@ -13,14 +17,12 @@ export class UserController {
     @Res() res: Response,
   ): Promise<any> {
     const info = await this.userService.findUser(userLoginDto);
-    res.setHeader(
-      'Authorization',
-      'Bearer ' + [info.accessToken, info.refreshToken],
-    );
+    res.setHeader('accessToken', info.accessToken);
     res.cookie('accessToken', info.accessToken, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
+    res.setHeader('refreshToken', info.refreshToken);
     res.cookie('refreshToken', info.refreshToken, {
       httpOnly: true,
     });
