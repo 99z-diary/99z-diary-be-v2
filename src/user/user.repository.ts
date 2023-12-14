@@ -3,10 +3,16 @@ import { User } from './entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
 import { UserLoginResponseDto } from './dto/user.login.response.dto';
+import { UserPasswordDto } from './dto/user.password.dto';
+import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserRepository extends Repository<User> {
-  constructor(private dataSource: DataSource) {
+  constructor(
+    private dataSource: DataSource,
+    private configService: ConfigService,
+  ) {
     super(User, dataSource.createEntityManager());
   }
 
@@ -28,5 +34,34 @@ export class UserRepository extends Repository<User> {
   async checkNicknameDuplicate(nickname: string): Promise<boolean> {
     const duplicate = await this.findOneBy({ nickname });
     return !duplicate;
+  }
+
+  async findEmailByNameAndPhone(
+    name: string,
+    phone: string,
+  ): Promise<string | boolean> {
+    const targetEmail = await this.findOneBy({ name, phone });
+    return !targetEmail.email ? false : targetEmail.email;
+  }
+
+  async findUserByEmailAndNameAndPhone(
+    userPasswordDto: UserPasswordDto,
+  ): Promise<UserDto> {
+    return await this.findOneBy({
+      email: userPasswordDto.email,
+      name: userPasswordDto.name,
+      phone: userPasswordDto.phone,
+    });
+  }
+
+  async changePasswordToTemp(
+    user: UserDto,
+    tmpPassword: string,
+  ): Promise<void> {
+    user.password = await bcrypt.hash(
+      tmpPassword,
+      Number(this.configService.get('BCRYPT_HASH_KEY')),
+    );
+    await this.save(user);
   }
 }
