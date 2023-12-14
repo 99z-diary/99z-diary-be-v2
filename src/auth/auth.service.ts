@@ -15,13 +15,24 @@ export class AuthService {
     private userRepository: UserRepository,
   ) {}
 
-  async createAccessToken(email: string, nickname: string): Promise<string> {
-    const payload: Payload = { email: email, nickname: nickname };
+  async createAccessToken(user_id: number, email: string): Promise<string> {
+    const payload: Payload = { user_id: user_id, email: email };
     const accessToken = this.jwtService.sign(payload, {
       secret: this.configService.get('ACCESS_JWT_SECRET'),
       expiresIn: `${this.configService.get('ACCESS_EXPIRE_TIME')}`,
     });
     return accessToken;
+  }
+
+  async createRefreshToken(user_id: number): Promise<string> {
+    const refreshToken = this.jwtService.sign(
+      { user_id: user_id },
+      {
+        secret: this.configService.get('REFRESH_JWT_SECRET'),
+        expiresIn: `${this.configService.get('REFRESH_EXPIRE_TIME')}`,
+      },
+    );
+    return refreshToken;
   }
 
   async validateAccessToken(payload: Payload): Promise<UserLoginResponseDto> {

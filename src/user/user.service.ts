@@ -14,9 +14,11 @@ export class UserService {
     private authService: AuthService,
   ) {}
 
-  async findUser(
-    userLoginDto: UserLoginDto,
-  ): Promise<{ user: UserLoginResponseDto; accessToken: string }> {
+  async findUser(userLoginDto: UserLoginDto): Promise<{
+    user: UserLoginResponseDto;
+    accessToken: string;
+    refreshToken: string;
+  }> {
     const user = await this.userRepository.findUserByEmail(userLoginDto.email);
     if (user === null) {
       throw new HttpException(
@@ -40,9 +42,10 @@ export class UserService {
             phone: user.phone,
           },
           accessToken: await this.authService.createAccessToken(
+            user.user_id,
             user.email,
-            user.nickname,
           ),
+          refreshToken: await this.authService.createRefreshToken(user.user_id),
         };
         return result;
       }
