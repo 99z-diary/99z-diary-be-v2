@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Payload } from './security/payload.interface';
 import { ConfigService } from '@nestjs/config';
@@ -36,6 +36,12 @@ export class AuthService {
   }
 
   async validateAccessToken(payload: Payload): Promise<UserLoginResponseDto> {
-    return await this.userRepository.validateTokenByEmail(payload.email);
+    const user = await this.userRepository.validateTokenByEmail(payload.email);
+    if (!user) {
+      throw new HttpException(
+        '유효하지 않은 사용자입니다!!',
+        HttpStatus.UNAUTHORIZED,
+      );
+    } else return user;
   }
 }

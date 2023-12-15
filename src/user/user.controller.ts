@@ -13,7 +13,7 @@ import {
 } from '@nestjs/swagger';
 import { UserLoginResponseDto } from './dto/user.login.response.dto';
 
-@ApiTags('user API')
+@ApiTags('User API')
 @Controller('user')
 export class UserController {
   constructor(
