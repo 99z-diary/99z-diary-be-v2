@@ -14,7 +14,7 @@ import { JwtStrategy } from './security/passport.jwt.strategy';
     }),
     PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
-  exports: [AuthService],
+  exports: [AuthService, JwtStrategy],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
 })

@@ -65,4 +65,15 @@ export class UserRepository extends Repository<User> {
     );
     await this.save(user);
   }
+
+  async findUserByUserId(user_id: number): Promise<UserLoginResponseDto> {
+    const tmp = await this.findOneBy({ user_id });
+    const user = new UserLoginResponseDto();
+    user.email = tmp.email;
+    user.name = tmp.name;
+    user.nickname = tmp.nickname;
+    user.phone = tmp.phone;
+    user.user_id = tmp.user_id;
+    return user;
+  }
 }

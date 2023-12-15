@@ -100,4 +100,9 @@ export class UserService {
       } else return false;
     }
   }
+
+  async getUserInfo(user_id: number): Promise<UserLoginResponseDto> {
+    const user = await this.userRepository.findUserByUserId(user_id);
+    return user;
+  }
 }

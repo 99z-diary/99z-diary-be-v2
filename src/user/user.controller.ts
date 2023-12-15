@@ -1,4 +1,13 @@
-import { Controller, Post, Get, Body, Res, Query } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Res,
+  Query,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserLoginDto } from './dto/user.login.dto';
 import { Response } from 'express';
@@ -12,6 +21,7 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import { UserLoginResponseDto } from './dto/user.login.response.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('User API')
 @Controller('user')
@@ -105,5 +115,22 @@ export class UserController {
     @Body() userPasswordDto: UserPasswordDto,
   ): Promise<boolean> {
     return await this.userService.findPassword(userPasswordDto);
+  }
+
+  @ApiOperation({
+    summary: '사용자 기본정보 조회',
+    description: '쿠키로 사용자 정보 조회',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '쿠키 유효 인증 성공',
+    type: UserLoginResponseDto,
+  })
+  @ApiResponse({ status: 401, description: '유효하지 않은 사용자' })
+  @ApiResponse({ status: 500, description: '서버 에러' })
+  @Get('/profile')
+  @UseGuards(AuthGuard('jwt'))
+  async getUserInfo(@Req() { user }): Promise<UserLoginResponseDto> {
+    return await this.userService.getUserInfo(user.user_id);
   }
 }
