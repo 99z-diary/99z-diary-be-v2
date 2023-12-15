@@ -38,14 +38,14 @@ export class UserService {
     if (user === null) {
       throw new HttpException(
         '등록되지 않은 사용자입니다!!',
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.UNAUTHORIZED,
       );
     } else {
       const check = await bcrypt.compare(userLoginDto.password, user.password);
       if (!check) {
         throw new HttpException(
           '암호가 일치하지 않습니다!!',
-          HttpStatus.BAD_REQUEST,
+          HttpStatus.UNAUTHORIZED,
         );
       } else {
         const result = {
@@ -68,7 +68,13 @@ export class UserService {
   }
 
   async findEmail(name: string, phone: string): Promise<string | boolean> {
-    return await this.userRepository.findEmailByNameAndPhone(name, phone);
+    const user = await this.userRepository.findEmailByNameAndPhone(name, phone);
+    if (!user) {
+      throw new HttpException(
+        '등록되지 않은 사용자입니다!!',
+        HttpStatus.UNAUTHORIZED,
+      );
+    } else return user;
   }
 
   async findPassword(userPasswordDto: UserPasswordDto): Promise<boolean> {
