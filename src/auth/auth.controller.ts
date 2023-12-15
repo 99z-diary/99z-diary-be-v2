@@ -1,7 +1,8 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Request } from 'express';
 
 @ApiTags('Auth API')
 @Controller('auth')
@@ -22,7 +23,7 @@ export class AuthController {
   @ApiResponse({ status: 500, description: '서버 에러' })
   @Get('/authenticate')
   @UseGuards(AuthGuard())
-  isAuthenticated(): any {
-    return true;
+  isAuthenticated(@Req() req: Request): any {
+    return { ...req.user, password: '' };
   }
 }
