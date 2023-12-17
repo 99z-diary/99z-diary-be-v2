@@ -46,7 +46,7 @@ export class SignupController {
     description: '인증코드 인증 성공',
     type: Boolean,
   })
-  @ApiResponse({ status: 400, description: '중복된 이메일 or 잘못된 인증코드' })
+  @ApiResponse({ status: 400, description: '틀린 이메일 or 잘못된 인증코드' })
   @ApiResponse({ status: 500, description: '서버 에러' })
   @Put('/verifycode')
   async verifyCode(
