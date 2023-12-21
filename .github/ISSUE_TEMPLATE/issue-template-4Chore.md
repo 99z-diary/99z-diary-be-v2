@@ -1,9 +1,9 @@
 ---
-name: 'Chore: issue template'
-about: 99z-diary-be-issue-template
-title: ''
-labels: ''
-assignees: ''
+name: Chore
+about: 기타 수정 사항
+title: '[Chore] title'
+labels: 📃 Chore
+assignees: Capoomaru
 
 ---
 
@@ -15,6 +15,7 @@ assignees: ''
 
 <!-- 왜 이슈를 열었는가 -->
 ## 📔 Description
+<!-- 수정사항에 대해 작성해 주세요. -->
 
 <!-- 무엇을 할 것인가를 체크박스로 만들고 작업이 끝날 때마다 체크하면서 진행 -->
 ## 🐈 Todo
