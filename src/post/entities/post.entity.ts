@@ -9,7 +9,7 @@ import {
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn()
-  post_id: number;
+  id: number;
 
   @Column()
   contents: string;
